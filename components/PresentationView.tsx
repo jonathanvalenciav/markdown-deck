@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import MarkdownPreview from './MarkdownPreview';
 import { AssetMap, MarkdownFile } from '../types';
-import { ArrowLeftIcon, ArrowRightIcon, CloseIcon } from './Icons';
+import { ArrowLeftIcon, ArrowRightIcon, CloseIcon, FontSizeIcon, MinusIcon, PlusIcon } from './Icons';
 
 interface PresentationViewProps {
     markdownFiles: MarkdownFile[];
@@ -10,9 +10,13 @@ interface PresentationViewProps {
     onImageClick: (src: string) => void;
 }
 
+const MIN_FONT_LEVEL = -2;
+const MAX_FONT_LEVEL = 2;
+
 const PresentationView: React.FC<PresentationViewProps> = ({ markdownFiles, assetMap, onExit, onImageClick }) => {
     const [slides, setSlides] = useState<string[]>([]);
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+    const [fontSizeLevel, setFontSizeLevel] = useState(0);
 
     useEffect(() => {
         // Join files with a double newline to ensure separation and prevent
@@ -45,6 +49,14 @@ const PresentationView: React.FC<PresentationViewProps> = ({ markdownFiles, asse
     const goToNext = useCallback(() => {
         setCurrentSlideIndex(prev => Math.min(totalSlides - 1, prev + 1));
     }, [totalSlides]);
+
+    const handleIncreaseFontSize = useCallback(() => {
+        setFontSizeLevel(prev => Math.min(MAX_FONT_LEVEL, prev + 1));
+    }, []);
+
+    const handleDecreaseFontSize = useCallback(() => {
+        setFontSizeLevel(prev => Math.max(MIN_FONT_LEVEL, prev - 1));
+    }, []);
     
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -87,14 +99,15 @@ const PresentationView: React.FC<PresentationViewProps> = ({ markdownFiles, asse
                 <span className="text-sm font-medium hidden sm:inline">Exit</span>
             </button>
             
-            <div className="w-full h-full bg-white text-neutral-900 rounded-lg shadow-2xl border border-neutral-200 overflow-y-auto p-8 md:p-12 transition-all duration-300 flex flex-col">
-                <div className="my-auto">
+            <div className={`w-full h-full text-neutral-900 rounded-lg shadow-2xl border border-neutral-200 overflow-y-auto p-8 md:p-12 transition-all duration-300 flex flex-col ${isTitleSlide ? 'justify-center bg-gradient-to-br from-white to-sky-50' : 'bg-white'}`}>
+                <div className={isTitleSlide ? '' : 'my-auto'}>
                     <MarkdownPreview
                         key={currentSlideIndex}
                         content={currentSlideContent}
                         assetMap={assetMap}
                         isTitleSlide={isTitleSlide}
                         onImageClick={onImageClick}
+                        fontSizeLevel={fontSizeLevel}
                     />
                 </div>
             </div>
@@ -109,8 +122,32 @@ const PresentationView: React.FC<PresentationViewProps> = ({ markdownFiles, asse
                     <ArrowLeftIcon className="w-6 h-6" />
                 </button>
                 
-                <div className="bg-black/40 text-white/90 text-sm px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity">
-                    {currentSlideIndex + 1} / {totalSlides}
+                <div className="flex items-center gap-2 bg-black/40 text-white/90 px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                    <button
+                        onClick={handleDecreaseFontSize}
+                        disabled={fontSizeLevel === MIN_FONT_LEVEL}
+                        className="p-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Decrease font size"
+                    >
+                        <MinusIcon className="w-5 h-5" />
+                    </button>
+                    
+                    <FontSizeIcon className="w-5 h-5" />
+                    
+                     <button
+                        onClick={handleIncreaseFontSize}
+                        disabled={fontSizeLevel === MAX_FONT_LEVEL}
+                        className="p-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                        aria-label="Increase font size"
+                    >
+                        <PlusIcon className="w-5 h-5" />
+                    </button>
+                    
+                    <div className="w-px h-5 bg-white/20 mx-2"></div>
+                    
+                    <div className="text-sm">
+                        {currentSlideIndex + 1} / {totalSlides}
+                    </div>
                 </div>
 
                 <button

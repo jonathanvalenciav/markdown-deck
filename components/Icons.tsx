@@ -98,3 +98,26 @@ export const PanelLeftIcon: React.FC<IconProps> = ({ className }) => (
         <line x1="9" x2="9" y1="3" y2="21" />
     </svg>
 );
+
+export const FontSizeIcon: React.FC<IconProps> = ({ className }) => (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 12h3"/>
+        <path d="M4 7V5h6v2"/>
+        <path d="M10 5v14"/>
+        <path d="M14 12h7"/>
+        <path d="M17.5 12v7"/>
+        <path d="M21 7h-4"/>
+    </svg>
+);
+
+export const PlusIcon: React.FC<IconProps> = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+  </svg>
+);
+
+export const MinusIcon: React.FC<IconProps> = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 12H6"></path>
+  </svg>
+);

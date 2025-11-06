@@ -54,7 +54,6 @@ const SetupView: React.FC<SetupViewProps> = ({
 
   const assetsInputProps: React.InputHTMLAttributes<HTMLInputElement> & { webkitdirectory?: string; directory?: string } = {
     type: 'file',
-    ref: assetsInputRef,
     onChange: handleAssetsChange,
     className: 'hidden',
     multiple: true,
@@ -141,7 +140,7 @@ const SetupView: React.FC<SetupViewProps> = ({
                     ) : (
                         <FileUpload id="assets-upload" label="" onFileSelect={onAssetsUpload} directory multiple />
                     )}
-                    <input {...assetsInputProps} />
+                    <input ref={assetsInputRef} {...assetsInputProps} />
                 </section>
             </div>
         </aside>

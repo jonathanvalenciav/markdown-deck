@@ -13,11 +13,20 @@ const AssetList: React.FC<AssetListProps> = ({ assetMap, onDelete }) => {
   return (
     <div className="max-h-60 overflow-y-auto border border-neutral-200 rounded-md">
         <ul className="text-sm divide-y divide-neutral-200">
-            {assetNames.map(name => (
-               <li key={name} className="flex items-center justify-between hover:bg-neutral-50 p-2 group">
+            {/* FIX: Explicitly type `name` as `string` to resolve type inference issue. */}
+            {assetNames.map((name: string) => {
+               const lastSlashIndex = name.lastIndexOf('/');
+               const filename = lastSlashIndex === -1 ? name : name.substring(lastSlashIndex + 1);
+               const path = lastSlashIndex === -1 ? '' : name.substring(0, lastSlashIndex);
+               
+               return (
+                <li key={name} className="flex items-center justify-between hover:bg-neutral-50 p-2 group">
                   <div className="flex items-center gap-3 truncate">
                     <ImageIcon className="w-5 h-5 text-sky-600 flex-shrink-0" />
-                    <span className="truncate text-neutral-700" title={name}>{name}</span>
+                    <div className="truncate">
+                        <p className="truncate text-sm text-neutral-800 font-medium" title={name}>{filename}</p>
+                        {path && <p className="truncate text-xs text-neutral-500" title={path}>{path}</p>}
+                    </div>
                   </div>
                   <button
                     onClick={() => onDelete(name)}
@@ -26,8 +35,9 @@ const AssetList: React.FC<AssetListProps> = ({ assetMap, onDelete }) => {
                   >
                     <TrashIcon className="w-4 h-4" />
                   </button>
-               </li>
-            ))}
+                </li>
+               );
+            })}
         </ul>
     </div>
   );
