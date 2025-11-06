@@ -1,0 +1,5 @@
+{
+  "name": "Markdown Deck",
+  "description": "An elegant and powerful application to upload and view Markdown files (.md) with full support for local image and asset references. Simply upload your Markdown file and its associated assets to see a beautifully rendered live preview.",
+  "requestFramePermissions": []
+}
